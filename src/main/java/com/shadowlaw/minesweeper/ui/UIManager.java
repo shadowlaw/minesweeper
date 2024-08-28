@@ -1,5 +1,6 @@
 package com.shadowlaw.minesweeper.ui;
 
+import com.shadowlaw.minesweeper.logic.LogicManager;
 import com.shadowlaw.minesweeper.ui.constants.Asset;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +19,7 @@ public class UIManager {
     private static Logger logger = LogManager.getLogger(UIManager.class);
 
     private static UIManager instance;
+    private static LogicManager logicManager = LogicManager.getInstance();
 
     private final Integer gameBoardSize = 9;
 
@@ -56,8 +58,15 @@ public class UIManager {
 
         boardPanel.setBorder(new EmptyBorder(DEFAULT_BOARDER_THICKNESS/2, DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS));
 
-        for (int square=1; square <= (gameBoardSize * gameBoardSize); square++) {
-            boardPanel.add(createImageLabel(SQUARE_CLOSED.getPath()));
+        logicManager.createGameBoard(gameBoardSize);
+
+        for (int square=0; square < (gameBoardSize * gameBoardSize); square++) {
+            JLabel squareLabel = createImageLabel(SQUARE_CLOSED.getPath());
+//            JLabel squareLabel = new JLabel(Integer.toString(square));
+            boardPanel.add(squareLabel);
+            boardPanel.setBackground(Color.black);
+            logicManager.addGameBoardSquare(squareLabel, square);
+//            Add start game listener to square
         }
         logger.info("board panel created");
         return boardPanel;
