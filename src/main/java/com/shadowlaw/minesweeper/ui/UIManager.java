@@ -1,7 +1,9 @@
 package com.shadowlaw.minesweeper.ui;
 
 import com.shadowlaw.minesweeper.logic.LogicManager;
+import com.shadowlaw.minesweeper.logic.board.Square;
 import com.shadowlaw.minesweeper.ui.constants.Asset;
+import com.shadowlaw.minesweeper.ui.listeners.SquareEventListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,6 +43,7 @@ public class UIManager {
     public void setup() {
 
         JFrame window = createWindow(WINDOW_WIDTH, WINDOW_HEIGHT);
+        window.setTitle("Minesweeper");
 
         JPanel headerPanel = getHeaderPanel();
         JPanel boardPanel = getBoardPanel(gameBoardSize);
@@ -61,13 +64,14 @@ public class UIManager {
 
         logicManager.createGameBoard(gameBoardSize);
 
-        for (int square=0; square < (gameBoardSize * gameBoardSize); square++) {
+        for (int squareIndex=0; squareIndex < (gameBoardSize * gameBoardSize); squareIndex++) {
             JLabel squareLabel = createImageLabel(SQUARE_CLOSED.getPath());
-//            JLabel squareLabel = new JLabel(Integer.toString(square));
+            squareLabel.addMouseListener(new SquareEventListener());
+
             boardPanel.add(squareLabel);
-            boardPanel.setBackground(Color.black);
-            logicManager.addGameBoardSquare(squareLabel, square);
-//            Add start game listener to square
+            Square square = logicManager.addGameBoardSquare(squareIndex);
+            squareLabel.setName(String.format("%s,%s", square.getRow(), square.getColumn()));
+
         }
         logger.info("board panel created");
         return boardPanel;

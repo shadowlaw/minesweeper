@@ -1,6 +1,7 @@
 package com.shadowlaw.minesweeper.logic.board;
 
 
+import com.shadowlaw.minesweeper.logic.exceptions.SquareNotFound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,6 +25,16 @@ public class GameGrid {
 
     public Square[][] getGameGrid() {
         return gameGrid;
+    }
+
+    public Square getSquare(int row, int column){
+        try {
+            return gameGrid[row][column];
+        } catch (Exception e){
+            logger.error("{}: {}", e.getClass(), e.getMessage());
+            logger.trace(e.getStackTrace());
+            throw new SquareNotFound(String.format("Unable to locate square with location %s:%s", row, column));
+        }
     }
 
     public int getRowFromGridCellNumber(int cellNumber) {

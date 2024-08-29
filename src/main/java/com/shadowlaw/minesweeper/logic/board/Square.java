@@ -8,6 +8,7 @@ public class Square {
     private final int flatGridLocation;
 
     private boolean isOpened = false;
+    private int adjacentMineNumber = 0;
 
     public Square(int row, int column, int flatGridLocation) {
         this.row = row;
@@ -19,9 +20,8 @@ public class Square {
         return this.isOpened;
     }
 
-    public boolean open() {
+    public void open() {
         isOpened = true;
-        return isOpened();
     }
 
     public int getRow() {
@@ -34,5 +34,13 @@ public class Square {
 
     public int getFlatGridLocation() {
         return flatGridLocation;
+    }
+
+    public int getAdjacentMineNumber() {
+        return adjacentMineNumber;
+    }
+
+    public void setAdjacentMineNumber(int adjacentMineNumber) {
+        this.adjacentMineNumber = adjacentMineNumber;
     }
 }
