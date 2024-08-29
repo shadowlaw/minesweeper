@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+import static com.shadowlaw.minesweeper.ui.utils.ImageLabelUtil.createImageLabel;
 import static com.shadowlaw.minesweeper.ui.constants.Asset.*;
 import static com.shadowlaw.minesweeper.ui.constants.Labels.FLAG_COUNTER;
 import static com.shadowlaw.minesweeper.ui.constants.Labels.TIME_COUNTER;
@@ -111,20 +112,6 @@ public class UIManager {
         window.setLocationRelativeTo(null);
 
         return window;
-    }
-
-    public JLabel createImageLabel(String path) {
-        try{
-            logger.debug("creating image label from path {}", path);
-            ImageIcon imageIcon = new ImageIcon(this.getClass().getClassLoader().getResource(path));
-            JLabel label = new JLabel(imageIcon);
-            label.setBorder(new EmptyBorder(0,0,0,0));
-            return label;
-        } catch (Exception e) {
-            logger.error("{}: {}", e.getClass(), e.getMessage());
-            logger.trace(e.getStackTrace());
-            return new JLabel();
-        }
     }
 
 }
