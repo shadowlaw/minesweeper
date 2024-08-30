@@ -1,6 +1,7 @@
 package com.shadowlaw.minesweeper.ui.listeners;
 
 import com.shadowlaw.minesweeper.logic.LogicManager;
+import com.shadowlaw.minesweeper.ui.components.Square;
 import com.shadowlaw.minesweeper.ui.utils.ImageLabelUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,19 +18,13 @@ public class SquareEventListener extends MouseAdapter {
     private final LogicManager logicManager = LogicManager.getInstance();
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        /*
-        * 1. Check logic manager if game was already started
-        * 2. if not started then run start game
-        **/
+    public void mouseClicked(MouseEvent mouseEvent) {
 
-        JLabel source = (JLabel) e.getSource();
-        logger.info("square at position {} was clicked", source.getName());
-        int eventSquareRow = Integer.parseInt(source.getName().split(",")[0]);
-        int eventSquareColumn = Integer.parseInt(source.getName().split(",")[1]);
+        Square source = (Square) mouseEvent.getSource();
+        logger.info("square at position {},{} was clicked", source.getRow(), source.getColumn());
 
         if(!logicManager.isGameStarted()) {
-            startGame(source, eventSquareRow, eventSquareColumn);
+            startGame(source, source.getRow(), source.getColumn());
         }
     }
 

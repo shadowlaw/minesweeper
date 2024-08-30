@@ -29,8 +29,8 @@ public class LogicManager {
         gameGrid = new GameGrid(boardSize, boardSize);
     }
 
-    public Square addGameBoardSquare(int cellIndex) {
-        Square square = new Square(gameGrid.getRowFromGridCellNumber(cellIndex), gameGrid.getColumnFromGridCellNumber(cellIndex), cellIndex);
+    public Square addGameBoardSquare(int row, int column, int cellIndex) {
+        Square square = new Square(row, column, cellIndex);
         gameGrid.addSquare(square);
         return square;
     }
@@ -39,9 +39,14 @@ public class LogicManager {
         return isStarted;
     }
 
+    public GameGrid getGameGrid() {
+        return gameGrid;
+    }
+
     public void startGame(int startSquareRow, int startSquareColumn) {
 
         logger.info("starting new game from square {}:{}", startSquareRow, startSquareColumn);
+
         isStarted = true;
         Square square = gameGrid.getSquare(startSquareRow, startSquareColumn);
         square.open();

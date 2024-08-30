@@ -1,7 +1,7 @@
 package com.shadowlaw.minesweeper.ui;
 
 import com.shadowlaw.minesweeper.logic.LogicManager;
-import com.shadowlaw.minesweeper.logic.board.Square;
+import com.shadowlaw.minesweeper.ui.components.Square;
 import com.shadowlaw.minesweeper.ui.constants.Asset;
 import com.shadowlaw.minesweeper.ui.listeners.SquareEventListener;
 import org.apache.logging.log4j.LogManager;
@@ -65,14 +65,16 @@ public class UIManager {
         logicManager.createGameBoard(gameBoardSize);
 
         for (int squareIndex=0; squareIndex < (gameBoardSize * gameBoardSize); squareIndex++) {
-            JLabel squareLabel = createImageLabel(SQUARE_CLOSED.getPath());
-            squareLabel.addMouseListener(new SquareEventListener());
+            int row = logicManager.getGameGrid().getRowFromGridCellNumber(squareIndex);
+            int column = logicManager.getGameGrid().getColumnFromGridCellNumber(squareIndex);
 
+            Square squareLabel = new Square(SQUARE_CLOSED.getPath(), row, column);
             boardPanel.add(squareLabel);
-            Square square = logicManager.addGameBoardSquare(squareIndex);
-            squareLabel.setName(String.format("%s,%s", square.getRow(), square.getColumn()));
+
+            logicManager.addGameBoardSquare(row, column, squareIndex);
 
         }
+
         logger.info("board panel created");
         return boardPanel;
     }
