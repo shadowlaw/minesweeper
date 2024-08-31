@@ -23,9 +23,9 @@ public class GameGrid {
     }
 
     public void addSquare(Square square) {
-        logger.debug("adding square at cell {}:{} -> {}", square.getRow(), square.getColumn(), square.getFlatGridLocation());
-        gameGrid[square.getRow()][square.getColumn()] = square;
-        logger.debug("square added at cell {}:{} -> {}", square.getRow(), square.getColumn(), square.getFlatGridLocation());
+        logger.debug("adding square at cell {}:{} -> {}", square.getPosition().getRow(), square.getPosition().getColumn(), square.getFlatGridLocation());
+        gameGrid[square.getPosition().getRow()][square.getPosition().getColumn()] = square;
+        logger.debug("square added at cell {}:{} -> {}", square.getPosition().getRow(), square.getPosition().getColumn(), square.getFlatGridLocation());
     }
 
     public Square[][] getGameGrid() {

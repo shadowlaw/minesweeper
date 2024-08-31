@@ -2,8 +2,7 @@ package com.shadowlaw.minesweeper.logic.board;
 
 public class Square {
 
-    private final int row;
-    private final int column;
+    private final Position position;
 
     private final int flatGridLocation;
 
@@ -11,8 +10,7 @@ public class Square {
     private int adjacentMineNumber = 0;
 
     public Square(int row, int column, int flatGridLocation) {
-        this.row = row;
-        this.column = column;
+        position = new Position(row, column);
         this.flatGridLocation = flatGridLocation;
     }
 
@@ -24,12 +22,8 @@ public class Square {
         isOpened = true;
     }
 
-    public int getRow() {
-        return row;
-    }
-
-    public int getColumn() {
-        return column;
+    public Position getPosition() {
+        return position;
     }
 
     public int getFlatGridLocation() {
