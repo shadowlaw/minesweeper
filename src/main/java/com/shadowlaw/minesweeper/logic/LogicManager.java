@@ -5,7 +5,6 @@ import com.shadowlaw.minesweeper.logic.board.Square;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
 
 public class LogicManager {
 
@@ -49,6 +48,8 @@ public class LogicManager {
 
         isStarted = true;
         Square square = gameGrid.getSquare(startSquareRow, startSquareColumn);
+        gameGrid.initialize(startSquareRow, startSquareColumn);
+
         square.open();
 
         logger.info("game started");
