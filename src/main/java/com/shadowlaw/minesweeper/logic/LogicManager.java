@@ -24,8 +24,8 @@ public class LogicManager {
         return instance;
     }
 
-    public void createGameBoard(int boardSize) {
-        gameGrid = new GameGrid(boardSize, boardSize);
+    public void createGameBoard(int boardSize, int mineNumber) {
+        gameGrid = new GameGrid(boardSize, boardSize, mineNumber);
     }
 
     public Square addGameBoardSquare(int row, int column, int cellIndex) {

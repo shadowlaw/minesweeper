@@ -25,6 +25,7 @@ public class UIManager {
     private static LogicManager logicManager = LogicManager.getInstance();
 
     private final Integer gameBoardSize = 9;
+    private final Integer mineNumber = 10;
 
     private UIManager() {}
 
@@ -62,7 +63,7 @@ public class UIManager {
 
         boardPanel.setBorder(new EmptyBorder(DEFAULT_BOARDER_THICKNESS/2, DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS));
 
-        logicManager.createGameBoard(gameBoardSize);
+        logicManager.createGameBoard(gameBoardSize, mineNumber);
 
         for (int squareIndex=0; squareIndex < (gameBoardSize * gameBoardSize); squareIndex++) {
             int row = logicManager.getGameGrid().getRowFromGridCellNumber(squareIndex);

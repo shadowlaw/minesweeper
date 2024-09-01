@@ -7,18 +7,19 @@ import com.shadowlaw.minesweeper.logic.exceptions.SquareNotFound;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GameGrid {
 
     private final Logger logger = LogManager.getLogger(GameGrid.class);
+    private final int mineNumber;
 
     private final Square[][] gameGrid;
 
-    public GameGrid(int rows, int columns) {
+    public GameGrid(int rows, int columns, int mineNumber) {
         logger.debug("Initializing game grid with size {} X {}", rows, columns);
         this.gameGrid = new Square[rows][columns];
+        this.mineNumber = mineNumber;
         logger.info("Game grid initialized");
     }
 
@@ -60,8 +61,16 @@ public class GameGrid {
 
     public void initialize(int startingPosRow, int startingPosColumn){
 
-        List<Square> safeSquares = getAdjacentSquares(startingPosRow, startingPosColumn);
-        safeSquares.add(getSquare(startingPosRow, startingPosColumn));
+        ArrayList<Square> safeSquares = new ArrayList<Square>(){{
+            add(getSquare(startingPosRow, startingPosColumn));
+        }};
+
+        List<Position> minePositions = generateMineLocations(safeSquares);
+
+        for(Position minePosition: minePositions){
+            Square mineSquare = getSquare(minePosition.getRow(), minePosition.getColumn());
+            mineSquare.setMine(true);
+        }
     }
 
     public List<Square> getAdjacentSquares(int row, int column) {
@@ -95,8 +104,38 @@ public class GameGrid {
         return square;
     }
 
-    public void generateMineLocations(List<Square> safeSquares) {
+    public List<Position> generateMineLocations(ArrayList<Square> safeSquares) {
+        List<Position> positions = new ArrayList<>();
+        Random rand = new Random();
 
+        while (positions.size() < mineNumber) {
+            logger.info("Generating mine positions");
+
+            boolean indexSeen = false;
+            int randIndex = rand.nextInt(gameGrid.length*gameGrid.length );
+
+            logger.debug("random index {} generated", randIndex);
+
+            for(Square safeSquare : safeSquares){
+                if (randIndex == safeSquare.getFlatGridLocation()) {
+                    logger.debug("index {} already exists", randIndex);
+                    indexSeen = true;
+                    break;
+                }
+            }
+
+            if (indexSeen) {
+                continue;
+            }
+
+            safeSquares.add(new Square(0,0, randIndex));
+            Position position = new Position(getRowFromGridCellNumber(randIndex), getColumnFromGridCellNumber(randIndex));
+            positions.add(position);
+
+            logger.debug("mine position {},{} accepted", position.getRow(), position.getColumn());
+        }
+
+        return positions;
     }
 
 }
