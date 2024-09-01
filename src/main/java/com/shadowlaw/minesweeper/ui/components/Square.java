@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.net.URL;
 
+import static com.shadowlaw.minesweeper.ui.constants.Asset.*;
+
 public class Square extends JLabel {
 
     private final Logger logger = LogManager.getLogger(Square.class);
@@ -55,7 +57,7 @@ public class Square extends JLabel {
     }
 
     public void open(){
-        setImage(Asset.SQUARE_OPENED.getPath());
+        setImage(path);
     }
 
     public boolean isMine() {
@@ -63,7 +65,46 @@ public class Square extends JLabel {
     }
 
     public void setMine(boolean mine) {
-        setImage(Asset.SQUARE_MINE_REVEALED.getPath());
+        setPath(Asset.SQUARE_MINE_REVEALED.getPath());
         isMine = mine;
+    }
+
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setAdjacentMineValue(int adjacentMineValue) {
+        String imagePath;
+        switch(adjacentMineValue) {
+            case 1:
+                imagePath = NUMBER_1.getPath();
+                break;
+            case 2:
+                imagePath = NUMBER_2.getPath();
+                break;
+            case 3:
+                imagePath = NUMBER_3.getPath();
+                break;
+            case 4:
+                imagePath = NUMBER_4.getPath();
+                break;
+            case 5:
+                imagePath = NUMBER_5.getPath();
+                break;
+            case 6:
+                imagePath = NUMBER_6.getPath();
+                break;
+            case 7:
+                imagePath = NUMBER_7.getPath();
+                break;
+            case 8:
+                imagePath = NUMBER_8.getPath();
+                break;
+            default:
+                imagePath = SQUARE_OPENED.getPath();
+                break;
+        }
+        path = imagePath;
     }
 }

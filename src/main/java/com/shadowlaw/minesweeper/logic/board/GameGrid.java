@@ -70,6 +70,11 @@ public class GameGrid {
         for(Position minePosition: minePositions){
             Square mineSquare = getSquare(minePosition.getRow(), minePosition.getColumn());
             mineSquare.setMine(true);
+            List<Square> adjacentSquares = getAdjacentSquares(minePosition.getRow(), minePosition.getColumn());
+            for(Square adjacentSquare: adjacentSquares)
+                adjacentSquare.setAdjacentMineNumber(
+                        adjacentSquare.getAdjacentMineNumber() + 1
+                );
         }
     }
 

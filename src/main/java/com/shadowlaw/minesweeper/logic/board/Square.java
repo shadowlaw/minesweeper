@@ -37,6 +37,10 @@ public class Square {
     }
 
     public void setAdjacentMineNumber(int adjacentMineNumber) {
+        if (isMine()) {
+            return;
+        }
+        uiSquare.setAdjacentMineValue(adjacentMineNumber);
         this.adjacentMineNumber = adjacentMineNumber;
     }
 
