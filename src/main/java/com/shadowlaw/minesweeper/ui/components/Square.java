@@ -1,5 +1,6 @@
 package com.shadowlaw.minesweeper.ui.components;
 
+import com.shadowlaw.minesweeper.ui.constants.Asset;
 import com.shadowlaw.minesweeper.ui.listeners.SquareEventListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ public class Square extends JLabel {
     private String path;
     private final int row;
     private final int column;
+    private boolean isMine = false;
 
     public Square(int row, int column) {
         this.row = row;
@@ -50,5 +52,18 @@ public class Square extends JLabel {
 
     public int getColumn() {
         return column;
+    }
+
+    public void open(){
+        setImage(Asset.SQUARE_OPENED.getPath());
+    }
+
+    public boolean isMine() {
+        return isMine;
+    }
+
+    public void setMine(boolean mine) {
+        setImage(Asset.SQUARE_MINE_REVEALED.getPath());
+        isMine = mine;
     }
 }

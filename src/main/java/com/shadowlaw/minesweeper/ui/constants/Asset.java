@@ -13,7 +13,9 @@ public enum Asset {
     COUNTER_9("sprites/counter_numbers/counter-no-9.png"),
 
     SQUARE_CLOSED("sprites/squares/square-closed.png"),
-    SQUARE_OPENED("sprites/squares/square-opened.png");
+    SQUARE_OPENED("sprites/squares/square-opened.png"),
+    SQUARE_MINE_REVEALED("sprites/squares/square-bomb-revealed.png"),
+    SQUARE_MINE_REVEALED_PRESSED("sprites/squares/square-bomb-revealed-pressed.png");
 
     private final String path;
 

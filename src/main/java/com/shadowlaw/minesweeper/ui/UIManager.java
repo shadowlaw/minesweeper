@@ -72,7 +72,8 @@ public class UIManager {
             Square squareLabel = new Square(SQUARE_CLOSED.getPath(), row, column);
             boardPanel.add(squareLabel);
 
-            logicManager.addGameBoardSquare(row, column, squareIndex);
+            com.shadowlaw.minesweeper.logic.board.Square square = logicManager.addGameBoardSquare(row, column, squareIndex);
+            square.setUiSquare(squareLabel);
 
         }
 

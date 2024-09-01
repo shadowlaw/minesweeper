@@ -3,10 +3,11 @@ package com.shadowlaw.minesweeper.logic.board;
 public class Square {
 
     private final Position position;
-
     private final int flatGridLocation;
+    private com.shadowlaw.minesweeper.ui.components.Square uiSquare;
 
     private boolean isOpened = false;
+    private boolean isMine = false;
     private int adjacentMineNumber = 0;
 
     public Square(int row, int column, int flatGridLocation) {
@@ -20,6 +21,7 @@ public class Square {
 
     public void open() {
         isOpened = true;
+        uiSquare.open();
     }
 
     public Position getPosition() {
@@ -36,5 +38,22 @@ public class Square {
 
     public void setAdjacentMineNumber(int adjacentMineNumber) {
         this.adjacentMineNumber = adjacentMineNumber;
+    }
+
+    public boolean isMine() {
+        return isMine;
+    }
+
+    public void setMine(boolean mine) {
+        isMine = mine;
+        uiSquare.setMine(mine);
+    }
+
+    public com.shadowlaw.minesweeper.ui.components.Square getUiSquare() {
+        return uiSquare;
+    }
+
+    public void setUiSquare(com.shadowlaw.minesweeper.ui.components.Square uiSquare) {
+        this.uiSquare = uiSquare;
     }
 }
