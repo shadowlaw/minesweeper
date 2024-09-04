@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static com.shadowlaw.minesweeper.ui.constants.Asset.SQUARE_OPENED;
+
 
 public class SquareEventListener extends MouseAdapter {
 
@@ -21,13 +23,14 @@ public class SquareEventListener extends MouseAdapter {
         logger.info("square at position {},{} was clicked", source.getRow(), source.getColumn());
 
         if(!logicManager.isGameStarted()) {
-            startGame(source.getRow(), source.getColumn());
+            startGame(source);
         }
     }
 
-    private void startGame(int startSquareRow, int startSquareColumn){
+    private void startGame(Square square){
 
-        logicManager.startGame(startSquareRow, startSquareColumn);
+        square.setPath(SQUARE_OPENED.getPath());
+        logicManager.startGame(square.getRow(), square.getColumn());
     }
 
 }
