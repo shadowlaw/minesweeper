@@ -19,17 +19,24 @@ public class SquareEventListener extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
 
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
+            executeLeftClickAction(mouseEvent);
+        }
+    }
+
+    private void executeLeftClickAction (MouseEvent mouseEvent) {
         Square source = (Square) mouseEvent.getSource();
         logger.info("square at position {},{} was clicked", source.getRow(), source.getColumn());
 
         if(!logicManager.isGameStarted()) {
             startGame(source);
         }
+
+        logicManager.openSquare(source.getRow(), source.getColumn());
     }
 
     private void startGame(Square square){
 
-        square.setPath(SQUARE_OPENED.getPath());
         logicManager.startGame(square.getRow(), square.getColumn());
     }
 

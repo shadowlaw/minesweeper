@@ -68,6 +68,7 @@ public class UIManager {
             int column = logicManager.getGameGrid().getColumnFromGridCellNumber(squareIndex);
 
             Square squareLabel = new Square(SQUARE_CLOSED.getPath(), row, column);
+            squareLabel.setPath(SQUARE_OPENED.getPath());
             boardPanel.add(squareLabel);
 
             com.shadowlaw.minesweeper.logic.board.Square square = logicManager.addGameBoardSquare(row, column, squareIndex);

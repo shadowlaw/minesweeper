@@ -75,4 +75,13 @@ public class LogicManager {
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
     }
+
+    public void openSquare(int row, int column) {
+        Square square = getGameGrid().getSquare(row, column);
+        if(square.isOpened()) {
+           return;
+        }
+
+        square.open();
+    }
 }
