@@ -11,8 +11,22 @@ public enum Asset {
     COUNTER_7("sprites/counter_numbers/counter-no-7.png"),
     COUNTER_8("sprites/counter_numbers/counter-no-8.png"),
     COUNTER_9("sprites/counter_numbers/counter-no-9.png"),
+    COUNTER_BLANK("sprites/counter_numbers/counter-no-blank.png"),
+    COUNTER_DASH("sprites/counter_numbers/counter-no-dash.png"),
 
-    SQUARE_CLOSED("sprites/squares/square-closed.png");
+    NUMBER_1("sprites/squares/square-number-1.png"),
+    NUMBER_2("sprites/squares/square-number-2.png"),
+    NUMBER_3("sprites/squares/square-number-3.png"),
+    NUMBER_4("sprites/squares/square-number-4.png"),
+    NUMBER_5("sprites/squares/square-number-5.png"),
+    NUMBER_6("sprites/squares/square-number-6.png"),
+    NUMBER_7("sprites/squares/square-number-7.png"),
+    NUMBER_8("sprites/squares/square-number-8.png"),
+
+    SQUARE_CLOSED("sprites/squares/square-closed.png"),
+    SQUARE_OPENED("sprites/squares/square-opened.png"),
+    SQUARE_MINE_REVEALED("sprites/squares/square-bomb-revealed.png"),
+    SQUARE_MINE_REVEALED_PRESSED("sprites/squares/square-bomb-revealed-pressed.png");
 
     private final String path;
 
