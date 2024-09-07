@@ -11,6 +11,8 @@ public enum Asset {
     COUNTER_7("sprites/counter_numbers/counter-no-7.png"),
     COUNTER_8("sprites/counter_numbers/counter-no-8.png"),
     COUNTER_9("sprites/counter_numbers/counter-no-9.png"),
+    COUNTER_BLANK("sprites/counter_numbers/counter-no-blank.png"),
+    COUNTER_DASH("sprites/counter_numbers/counter-no-dash.png"),
 
     NUMBER_1("sprites/squares/square-number-1.png"),
     NUMBER_2("sprites/squares/square-number-2.png"),

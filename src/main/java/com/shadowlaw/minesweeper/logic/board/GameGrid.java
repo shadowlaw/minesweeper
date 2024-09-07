@@ -94,7 +94,7 @@ public class GameGrid {
 
     public Square getAdjacentSquare(AdjacentSquareLocation squareLocation, int row, int column){
 
-        logger.info("Retrieving adjacent square for location {} of position {},{}", squareLocation.name(),  row, column);
+        logger.debug("Retrieving adjacent square for location {} of position {},{}", squareLocation.name(),  row, column);
         int rowOfInterest = squareLocation.getRowOfInterest(row);
         int columnOfInterest = squareLocation.getColumnOfInterest(column);
 
@@ -105,7 +105,7 @@ public class GameGrid {
         }
 
         Square square = getSquare(rowOfInterest, columnOfInterest);
-        logger.info("Adjacent square retrieved");
+        logger.debug("Adjacent square retrieved");
         return square;
     }
 

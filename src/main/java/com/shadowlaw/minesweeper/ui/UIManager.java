@@ -1,9 +1,9 @@
 package com.shadowlaw.minesweeper.ui;
 
 import com.shadowlaw.minesweeper.logic.LogicManager;
+import com.shadowlaw.minesweeper.logic.header.TimerCounterTask;
+import com.shadowlaw.minesweeper.ui.components.Counter;
 import com.shadowlaw.minesweeper.ui.components.Square;
-import com.shadowlaw.minesweeper.ui.constants.Asset;
-import com.shadowlaw.minesweeper.ui.listeners.SquareEventListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,18 +11,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static com.shadowlaw.minesweeper.ui.utils.ImageLabelUtil.createImageLabel;
 import static com.shadowlaw.minesweeper.ui.constants.Asset.*;
-import static com.shadowlaw.minesweeper.ui.constants.Labels.FLAG_COUNTER;
-import static com.shadowlaw.minesweeper.ui.constants.Labels.TIME_COUNTER;
+import static com.shadowlaw.minesweeper.ui.constants.Labels.*;
 import static com.shadowlaw.minesweeper.ui.constants.Sizes.*;
 
 public class UIManager {
 
-    private static Logger logger = LogManager.getLogger(UIManager.class);
+    private static final Logger logger = LogManager.getLogger(UIManager.class);
 
     private static UIManager instance;
-    private static LogicManager logicManager = LogicManager.getInstance();
+    private static final LogicManager logicManager = LogicManager.getInstance();
 
     private final Integer gameBoardSize = 9;
     private final Integer mineNumber = 10;
@@ -87,8 +85,9 @@ public class UIManager {
         headerPanel.setBounds(0,0, HEADER_PANEL_WIDTH, HEADER_PANEL_HEIGHT);
         headerPanel.setBorder(new EmptyBorder(DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS+5, DEFAULT_BOARDER_THICKNESS/2, DEFAULT_BOARDER_THICKNESS));
 
-        JPanel flagPanel = createCounter(COUNTER_0, COUNTER_1, COUNTER_0, FLAG_COUNTER);
-        JPanel counterPanel = createCounter(COUNTER_0, COUNTER_0, COUNTER_0, TIME_COUNTER);
+        Counter flagPanel = new Counter(FLAG_COUNTER, "0", "1", "0");
+        Counter counterPanel = new Counter(TIME_COUNTER, "0", "0", "0");
+        logicManager.setTimerCounterTask(new TimerCounterTask(counterPanel));
 
         headerPanel.add(flagPanel, BorderLayout.WEST);
         headerPanel.add(counterPanel, BorderLayout.EAST);
@@ -96,20 +95,6 @@ public class UIManager {
         return headerPanel;
     }
 
-    private JPanel createCounter(Asset hundreds, Asset tens, Asset ones, String counterName) {
-
-        logger.debug("counter [{}] values: 2: {}, 1: {}, 0: {}", counterName, hundreds.name(), tens.name(), ones.name() );
-        JPanel panel = new JPanel(new GridLayout(0,3,0,0));
-
-        panel.setName(counterName);
-        JLabel counterHundreds = createImageLabel(hundreds.getPath());
-        JLabel counterTens = createImageLabel(tens.getPath());
-        JLabel counterOnes = createImageLabel(ones.getPath());
-        panel.add(counterHundreds);
-        panel.add(counterTens);
-        panel.add(counterOnes);
-        return panel;
-    }
 
     public JFrame createWindow(Integer width, Integer height) {
         logger.debug("window size: {} {}", width, height);
@@ -121,5 +106,4 @@ public class UIManager {
 
         return window;
     }
-
 }
