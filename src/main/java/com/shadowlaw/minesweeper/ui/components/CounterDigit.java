@@ -1,19 +1,12 @@
 package com.shadowlaw.minesweeper.ui.components;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import java.util.List;
-
 import static com.shadowlaw.minesweeper.ui.constants.Asset.*;
 
-public class CounterDigit extends ImageLabel implements PropertyChangeListener {
+public class CounterDigit extends ImageLabel {
 
-    private final int place;
 
-    public CounterDigit(String value, int place) {
+    public CounterDigit(String value) {
         setValue(value);
-        this.place = place;
     }
 
     @Override
@@ -63,16 +56,5 @@ public class CounterDigit extends ImageLabel implements PropertyChangeListener {
                 break;
         }
         setPath(imagePath);
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        List<String> currentState = (List<String>) evt.getOldValue();
-        List<String> updatedState = (List<String>) evt.getNewValue();
-
-        if (!currentState.get(place).equals(updatedState.get(place))){
-            setValue(updatedState.get(place));
-        }
-
     }
 }

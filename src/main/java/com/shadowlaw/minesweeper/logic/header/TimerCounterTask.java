@@ -1,6 +1,5 @@
 package com.shadowlaw.minesweeper.logic.header;
 
-import com.shadowlaw.minesweeper.ui.components.Counter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +17,7 @@ public class TimerCounterTask extends TimerTask {
 
     @Override
     public void run() {
-        logger.info("Timer tick for counter: {} at {}", counter.getName(), counter.getValue());
+        logger.info("Timer tick for counter: {} at {}", counter.getCounterName(), counter.getValue());
         counter.updateCounterState(counter.getValue() );
         counter.setValue(counter.getValue() + 1L);
     }

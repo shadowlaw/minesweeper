@@ -5,62 +5,40 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class Counter extends JPanel {
 
-    private final PropertyChangeSupport observable;
-    private List<String> counterState;
-    private long value = 0L;
-
     private static final Logger logger = LogManager.getLogger(Counter.class);
+    private final com.shadowlaw.minesweeper.logic.header.Counter logicCounter;
 
     public Counter(String counterName, String... initialState) {
-        observable = new PropertyChangeSupport(this);
 
-        List<String> initialStateList = Arrays.asList(initialState);
-        logger.debug("creating counter [{}] with values {}", counterName, initialStateList);
+        logger.debug("creating counter [{}] with values {}", counterName, initialState);
 
         setName(counterName);
-
-        counterState = initialStateList;
 
         GridLayout layout = new GridLayout();
         layout.setHgap(0);
         layout.setVgap(0);
         setLayout(layout);
 
+        com.shadowlaw.minesweeper.logic.header.Counter logicCounter =
+                new com.shadowlaw.minesweeper.logic.header.Counter(counterName, initialState);
+
+        this.logicCounter = logicCounter;
+
         for(int placeIndex = 0; placeIndex < initialState.length; placeIndex++) {
-            CounterDigit counterDigit = new CounterDigit(initialStateList.get(placeIndex), placeIndex);
-            observable.addPropertyChangeListener(counterDigit);
+            String placeValue = initialState[placeIndex];
+
+            CounterDigit counterDigit = new CounterDigit(placeValue);
+            com.shadowlaw.minesweeper.logic.header.CounterDigit logicDigit =
+                    new com.shadowlaw.minesweeper.logic.header.CounterDigit(placeValue, placeIndex, counterDigit);
+            logicCounter.addCounterDigit(logicDigit);
             add(counterDigit);
         }
     }
 
-    public long getValue() {
-        return value;
-    }
-
-    public void setValue(long value) {
-        this.value = value;
-    }
-
-    public void updateCounterState(Long counterState){
-        ArrayList<String> updatedState = new ArrayList<>(Arrays.asList(String.valueOf(counterState).split("(?<=.)")));
-
-        if (this.counterState.size() != updatedState.size() && this.counterState.size() > updatedState.size()) {
-            ArrayList<String> paddedList =
-                    new ArrayList<>(Collections.nCopies(this.counterState.size() - updatedState.size(), "0"));
-
-            paddedList.addAll(updatedState);
-            updatedState = paddedList;
-        }
-
-        observable.firePropertyChange("counterState", this.counterState, updatedState);
-        this.counterState = updatedState;
+    public com.shadowlaw.minesweeper.logic.header.Counter getLogicCounter() {
+        return logicCounter;
     }
 }

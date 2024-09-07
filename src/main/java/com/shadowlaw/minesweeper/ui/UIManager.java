@@ -87,7 +87,7 @@ public class UIManager {
 
         Counter flagPanel = new Counter(FLAG_COUNTER, "0", "1", "0");
         Counter counterPanel = new Counter(TIME_COUNTER, "0", "0", "0");
-        logicManager.setTimerCounterTask(new TimerCounterTask(counterPanel));
+        logicManager.setTimerCounterTask(new TimerCounterTask(counterPanel.getLogicCounter()));
 
         headerPanel.add(flagPanel, BorderLayout.WEST);
         headerPanel.add(counterPanel, BorderLayout.EAST);
