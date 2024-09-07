@@ -24,6 +24,13 @@ public class Square {
         uiSquare.open();
     }
 
+    public void open(boolean clicked){
+        if (isMine && clicked) {
+            setTriggeredMine();
+        }
+        open();
+    }
+
     public Position getPosition() {
         return position;
     }
@@ -51,6 +58,10 @@ public class Square {
     public void setMine(boolean mine) {
         isMine = mine;
         uiSquare.setMine(mine);
+    }
+
+    private void setTriggeredMine() {
+        uiSquare.setTriggeredMine();
     }
 
     public com.shadowlaw.minesweeper.ui.components.Square getUiSquare() {

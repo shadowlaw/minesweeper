@@ -82,6 +82,6 @@ public class LogicManager {
            return;
         }
 
-        square.open();
+        square.open(true);
     }
 }
