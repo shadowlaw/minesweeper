@@ -56,12 +56,12 @@ public class LogicManager {
         logger.info("starting new game from square {}:{}", startSquareRow, startSquareColumn);
 
         isStarted = true;
-        Square square = gameGrid.getSquare(startSquareRow, startSquareColumn);
+
         gameGrid.initialize(startSquareRow, startSquareColumn);
 
         startGameTimer(gameTimerInitialDelay, gameTimerDelayPeriod, TimeUnit.MILLISECONDS);
 
-        square.open();
+        gameGrid.openSquare(startSquareRow, startSquareColumn);
 
         logger.info("game started");
 

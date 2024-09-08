@@ -114,9 +114,9 @@ public class GameGrid {
     public List<Position> generateMineLocations(ArrayList<Square> safeSquares) {
         List<Position> positions = new ArrayList<>();
         Random rand = new Random();
+        logger.info("Generating mine positions");
 
         while (positions.size() < mineNumber) {
-            logger.info("Generating mine positions");
 
             boolean indexSeen = false;
             int randIndex = rand.nextInt(gameGrid.length*gameGrid.length );
@@ -148,6 +148,7 @@ public class GameGrid {
     public void openSquare(int row, int column) {
         Square square = getSquare(row, column);
         if(square.isOpened()) {
+            logger.warn("square {}:{} already opened", row, column);
             return;
         }
 
@@ -155,6 +156,25 @@ public class GameGrid {
 
         if (square.isMine()) {
             openMines();
+        } else if (square.getAdjacentMineNumber() == 0) {
+            openAllAdjacentEmptySquares(square.getPosition().getRow(), square.getPosition().getColumn());
+        }
+    }
+
+    private void openAllAdjacentEmptySquares(int triggeredRow, int triggeredColumn) {
+
+        logger.debug("opening adjacent squares to {}:{}", triggeredRow, triggeredColumn);
+
+        LinkedHashSet<Square> adjacentSquaresSet = new LinkedHashSet<>(getAdjacentSquares(triggeredRow, triggeredColumn));
+        List<Square> adjacentSquareList = Arrays.asList(adjacentSquaresSet.toArray(new Square[]{}));
+
+        for (int squareIndex = 0; squareIndex < adjacentSquareList.size(); squareIndex++) {
+            Square adjacentSquare = adjacentSquareList.get(squareIndex);
+            if (adjacentSquare.getAdjacentMineNumber() == 0) {
+                adjacentSquaresSet.addAll(getAdjacentSquares(adjacentSquare.getUiSquare().getRow(), adjacentSquare.getPosition().getColumn()));
+                adjacentSquareList = Arrays.asList(adjacentSquaresSet.toArray(new Square[]{}));
+            }
+            adjacentSquare.open();
         }
     }
 
