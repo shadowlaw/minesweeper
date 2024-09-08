@@ -15,6 +15,7 @@ public class GameGrid {
     private final int mineNumber;
 
     private final Square[][] gameGrid;
+    private List<Position> minePositions;
 
     public GameGrid(int rows, int columns, int mineNumber) {
         logger.debug("Initializing game grid with size {} X {}", rows, columns);
@@ -66,6 +67,7 @@ public class GameGrid {
         }};
 
         List<Position> minePositions = generateMineLocations(safeSquares);
+        this.minePositions = minePositions;
 
         for(Position minePosition: minePositions){
             Square mineSquare = getSquare(minePosition.getRow(), minePosition.getColumn());
@@ -143,4 +145,24 @@ public class GameGrid {
         return positions;
     }
 
+    public void openSquare(int row, int column) {
+        Square square = getSquare(row, column);
+        if(square.isOpened()) {
+            return;
+        }
+
+        square.open(true);
+
+        if (square.isMine()) {
+            openMines();
+        }
+    }
+
+    private void openMines() {
+        for(Position minePosition: minePositions){
+            Square mineSquare = getSquare(minePosition.getRow(), minePosition.getColumn());
+            logger.debug("opening mine at position {}:{}", minePosition.getRow(), minePosition.getColumn());
+            mineSquare.open();
+        }
+    }
 }
