@@ -17,7 +17,7 @@ public class TimerCounterTask extends TimerTask {
 
     @Override
     public void run() {
-        logger.info("Timer tick for counter: {} at {}", counter.getCounterName(), counter.getValue());
+        logger.debug("Timer tick for counter: {} at {}", counter.getCounterName(), counter.getValue());
         counter.updateCounterState(counter.getValue() );
         counter.setValue(counter.getValue() + 1L);
     }
