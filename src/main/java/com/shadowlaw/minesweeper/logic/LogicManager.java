@@ -56,12 +56,12 @@ public class LogicManager {
         logger.info("starting new game from square {}:{}", startSquareRow, startSquareColumn);
 
         isStarted = true;
-        Square square = gameGrid.getSquare(startSquareRow, startSquareColumn);
+
         gameGrid.initialize(startSquareRow, startSquareColumn);
 
         startGameTimer(gameTimerInitialDelay, gameTimerDelayPeriod, TimeUnit.MILLISECONDS);
 
-        square.open();
+        gameGrid.openSquare(startSquareRow, startSquareColumn);
 
         logger.info("game started");
 
@@ -74,5 +74,9 @@ public class LogicManager {
     private void startGameTimer(long initialDelay, long period, TimeUnit timeUnit) {
         ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
+    }
+
+    public void openSquare(int row, int column) {
+        gameGrid.openSquare(row, column);
     }
 }

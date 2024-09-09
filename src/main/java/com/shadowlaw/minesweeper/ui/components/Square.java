@@ -84,4 +84,8 @@ public class Square extends ImageLabel {
         }
         setPath(imagePath);
     }
+
+    public void setTriggeredMine() {
+        setPath(Asset.SQUARE_MINE_REVEALED_PRESSED.getPath());
+    }
 }
