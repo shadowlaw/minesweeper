@@ -16,6 +16,8 @@ public class Square extends ImageLabel {
     private final int row;
     private final int column;
     private boolean isMine = false;
+    private boolean isFlagged;
+    private String previousPath;
 
     public Square(int row, int column) {
         this.row = row;
@@ -87,5 +89,17 @@ public class Square extends ImageLabel {
 
     public void setTriggeredMine() {
         setPath(Asset.SQUARE_MINE_REVEALED_PRESSED.getPath());
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.isFlagged = flagged;
+
+        if (flagged) {
+            this.previousPath = path;
+            setImage(SQUARE_FLAGGED.getPath());
+            return;
+        }
+        setImage(SQUARE_CLOSED.getPath());
+        setPath(previousPath);
     }
 }
