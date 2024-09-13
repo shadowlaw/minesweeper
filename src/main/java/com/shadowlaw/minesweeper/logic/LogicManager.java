@@ -53,7 +53,7 @@ public class LogicManager {
         return gameGrid;
     }
 
-    public void startGame(int startSquareRow, int startSquareColumn) {
+    public void startGame(int startSquareRow, int startSquareColumn, boolean flagSquare) {
 
         logger.info("starting new game from square {}:{}", startSquareRow, startSquareColumn);
 
@@ -63,7 +63,9 @@ public class LogicManager {
 
         startGameTimer(gameTimerInitialDelay, gameTimerDelayPeriod, TimeUnit.MILLISECONDS);
 
-        gameGrid.openSquare(startSquareRow, startSquareColumn);
+        if (!flagSquare) {
+            gameGrid.openSquare(startSquareRow, startSquareColumn);
+        }
 
         logger.info("game started");
 

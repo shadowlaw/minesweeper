@@ -28,25 +28,22 @@ public class SquareEventListener extends MouseAdapter {
     }
 
     private void executeRightClickAction(Square eventSquareSource) {
-        if (!logicManager.isGameStarted()) {
-            return;
-        }
 
+
+        if (!logicManager.isGameStarted()) {
+            logicManager.startGame(eventSquareSource.getRow(), eventSquareSource.getColumn(), true);
+        }
         logicManager.actionRightClickOnSquare(eventSquareSource.getRow(), eventSquareSource.getColumn());
+
     }
 
     private void executeLeftClickAction (Square eventSquareSource) {
 
         if(!logicManager.isGameStarted()) {
-            startGame(eventSquareSource);
+            logicManager.startGame(eventSquareSource.getRow(), eventSquareSource.getColumn(), false);
         }
 
         logicManager.actionLeftClickOnSquare(eventSquareSource.getRow(), eventSquareSource.getColumn());
-    }
-
-    private void startGame(Square square){
-
-        logicManager.startGame(square.getRow(), square.getColumn());
     }
 
 }
