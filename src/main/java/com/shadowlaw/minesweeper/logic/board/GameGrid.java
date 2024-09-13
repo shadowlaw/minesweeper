@@ -182,6 +182,9 @@ public class GameGrid {
                 adjacentSquaresSet.addAll(getAdjacentSquares(adjacentSquare.getUiSquare().getRow(), adjacentSquare.getPosition().getColumn()));
                 adjacentSquareList = Arrays.asList(adjacentSquaresSet.toArray(new Square[]{}));
             }
+            if (adjacentSquare.isFlagged()) {
+                toggleSquareFlag(adjacentSquare.getPosition().getRow(), adjacentSquare.getPosition().getColumn());
+            }
             adjacentSquare.open();
         }
     }
@@ -190,6 +193,10 @@ public class GameGrid {
         for(Position minePosition: minePositions){
             Square mineSquare = getSquare(minePosition.getRow(), minePosition.getColumn());
             logger.debug("opening mine at position {}:{}", minePosition.getRow(), minePosition.getColumn());
+            if(mineSquare.isFlagged()){
+                logger.info("mine square is flagged. unable to open mine");
+                continue;
+            }
             mineSquare.open();
         }
     }

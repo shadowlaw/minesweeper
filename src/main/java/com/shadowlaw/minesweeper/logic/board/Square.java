@@ -21,10 +21,6 @@ public class Square {
     }
 
     public void open() {
-        if (isFlagged()) {
-            return;
-        }
-
         isOpened = true;
         uiSquare.open();
     }

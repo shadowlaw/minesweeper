@@ -80,6 +80,7 @@ public class LogicManager {
 
     public void actionLeftClickOnSquare(int row, int column) {
         gameGrid.openSquare(row, column);
+        flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
     }
 
     public void actionRightClickOnSquare(int row, int column) {
