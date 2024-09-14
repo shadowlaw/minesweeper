@@ -1,8 +1,10 @@
 package com.shadowlaw.minesweeper.ui;
 
 import com.shadowlaw.minesweeper.logic.LogicManager;
+import com.shadowlaw.minesweeper.logic.header.GameState;
 import com.shadowlaw.minesweeper.logic.header.TimerCounterTask;
 import com.shadowlaw.minesweeper.ui.components.Counter;
+import com.shadowlaw.minesweeper.ui.components.GameStateIcon;
 import com.shadowlaw.minesweeper.ui.components.Square;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -83,16 +85,20 @@ public class UIManager {
 
     private JPanel getHeaderPanel() {
         logger.info("creating header panel");
-        JPanel headerPanel = new JPanel(new BorderLayout(5,5));
+        JPanel headerPanel = new JPanel(new BorderLayout(65,5));
         headerPanel.setBounds(0,0, HEADER_PANEL_WIDTH, HEADER_PANEL_HEIGHT);
         headerPanel.setBorder(new EmptyBorder(DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS+5, DEFAULT_BOARDER_THICKNESS/2, DEFAULT_BOARDER_THICKNESS));
 
         Counter flagPanel = new Counter(FLAG_COUNTER, "0", "1", "0");
         Counter counterPanel = new Counter(TIME_COUNTER, "0", "0", "0");
+        GameStateIcon gameStateIcon = new GameStateIcon();
+
         logicManager.setTimerCounterTask(new TimerCounterTask(counterPanel.getLogicCounter()));
         logicManager.setFlagCounter(flagPanel.getLogicCounter());
+        logicManager.initializeGameState(new GameState(gameStateIcon));
 
         headerPanel.add(flagPanel, BorderLayout.WEST);
+        headerPanel.add(gameStateIcon, BorderLayout.CENTER);
         headerPanel.add(counterPanel, BorderLayout.EAST);
         logger.info("header panel created");
         return headerPanel;

@@ -3,6 +3,7 @@ package com.shadowlaw.minesweeper.logic;
 import com.shadowlaw.minesweeper.logic.board.GameGrid;
 import com.shadowlaw.minesweeper.logic.board.Square;
 import com.shadowlaw.minesweeper.logic.header.Counter;
+import com.shadowlaw.minesweeper.logic.header.GameState;
 import com.shadowlaw.minesweeper.logic.header.TimerCounterTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +20,7 @@ public class LogicManager {
 
     private Boolean isStarted = Boolean.FALSE;
     private boolean isGameStatePlayable = true;
+    private GameState gameState;
 
     private GameGrid gameGrid;
 
@@ -104,6 +106,7 @@ public class LogicManager {
 
         if (square.isOpened() && square.isMine()) {
             logger.info("Mine square {}:{} opened", row, column);
+            gameState.updateGameState(false);
             endGame();
             return;
         }
@@ -153,7 +156,10 @@ public class LogicManager {
         } catch (InterruptedException e) {
             logger.trace(e);
             logger.error("Game timer termination Interrupted");
-            return;
         }
+    }
+
+    public void initializeGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 }

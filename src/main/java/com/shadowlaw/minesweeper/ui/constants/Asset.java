@@ -27,7 +27,10 @@ public enum Asset {
     SQUARE_OPENED("sprites/squares/square-opened.png"),
     SQUARE_MINE_REVEALED("sprites/squares/square-bomb-revealed.png"),
     SQUARE_MINE_REVEALED_PRESSED("sprites/squares/square-bomb-revealed-pressed.png"),
-    SQUARE_FLAGGED("sprites/squares/square-flagged.png");
+    SQUARE_FLAGGED("sprites/squares/square-flagged.png"),
+
+    FACE_SMILE("sprites/faces/face-smile.png"),
+    FACE_CROSS("sprites/faces/face-cross.png");
 
     private final String path;
 
