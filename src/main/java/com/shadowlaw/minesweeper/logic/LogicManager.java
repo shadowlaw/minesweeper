@@ -22,6 +22,7 @@ public class LogicManager {
 
     private final long gameTimerInitialDelay = 1000L;
     private final long gameTimerDelayPeriod = 1000L;
+    private ScheduledExecutorService gameTimer;
     private TimerCounterTask timerCounterTask;
     private Counter flagCounter;
 
@@ -76,12 +77,24 @@ public class LogicManager {
     }
 
     private void startGameTimer(long initialDelay, long period, TimeUnit timeUnit) {
-        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
-        timer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
+        gameTimer = Executors.newSingleThreadScheduledExecutor();
+        gameTimer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
+    }
+
+    public boolean isGameInitialized() {
+        return isGameinItialized;
     }
 
     public void actionLeftClickOnSquare(int row, int column) {
         gameGrid.openSquare(row, column);
+
+        Square square = gameGrid.getSquare(row, column);
+
+        if (square.isOpened() && square.isMine()) {
+            logger.info("Mine square {}:{} opened", row, column);
+            endGame();
+        }
+
         flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
     }
 
@@ -92,5 +105,32 @@ public class LogicManager {
 
     public void setFlagCounter(Counter logicCounter) {
         this.flagCounter = logicCounter;
+    }
+
+    private void endGame() {
+        logger.info("Ending Game");
+        stopGameTimer();
+        isStarted = false;
+        logger.info("Game ended");
+    }
+
+    private void stopGameTimer() {
+
+        if (gameTimer.isShutdown()) {
+            logger.warn("game timer is already stopped");
+            return;
+        }
+
+        gameTimer.shutdown();
+
+        try{
+            while (!gameTimer.awaitTermination(gameTimerDelayPeriod, TimeUnit.MILLISECONDS)) {
+                logger.debug("waiting for game timer to terminate. waiting for {} milliseconds", gameTimerDelayPeriod);
+            }
+        } catch (InterruptedException e) {
+            logger.trace(e);
+            logger.error("Game timer termination Interrupted");
+            return;
+        }
     }
 }
