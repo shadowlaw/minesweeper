@@ -18,6 +18,8 @@ public class LogicManager {
     private final Logger logger = LogManager.getLogger(LogicManager.class);
 
     private Boolean isStarted = Boolean.FALSE;
+    private boolean isGameStatePlayable = true;
+
     private GameGrid gameGrid;
 
     private final long gameTimerInitialDelay = 1000L;
@@ -46,8 +48,8 @@ public class LogicManager {
         return square;
     }
 
-    public boolean isGameStarted() {
-        return isStarted;
+    public boolean isGameStartable() {
+        return !isStarted && isGameStatePlayable;
     }
 
     public GameGrid getGameGrid() {
@@ -58,8 +60,6 @@ public class LogicManager {
 
         logger.info("starting new game from square {}:{}", startSquareRow, startSquareColumn);
 
-        isStarted = true;
-
         gameGrid.initialize(startSquareRow, startSquareColumn);
 
         startGameTimer(gameTimerInitialDelay, gameTimerDelayPeriod, TimeUnit.MILLISECONDS);
@@ -67,6 +67,8 @@ public class LogicManager {
         if (!flagSquare) {
             gameGrid.openSquare(startSquareRow, startSquareColumn);
         }
+
+        isStarted = true;
 
         logger.info("game started");
 
@@ -81,11 +83,21 @@ public class LogicManager {
         gameTimer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
     }
 
-    public boolean isGameInitialized() {
-        return isGameinItialized;
+    public boolean isGameStatePlayable() {
+        return isGameStatePlayable;
     }
 
     public void actionLeftClickOnSquare(int row, int column) {
+
+        if(isGameStartable()) {
+            startGame(row, column, false);
+        }
+
+        if (!isGameStatePlayable()) {
+            logger.warn("game is not in playable position");
+            return;
+        }
+
         gameGrid.openSquare(row, column);
 
         Square square = gameGrid.getSquare(row, column);
@@ -93,12 +105,22 @@ public class LogicManager {
         if (square.isOpened() && square.isMine()) {
             logger.info("Mine square {}:{} opened", row, column);
             endGame();
+            return;
         }
 
         flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
     }
 
     public void actionRightClickOnSquare(int row, int column) {
+        if(isGameStartable()) {
+            startGame(row, column, true);
+        }
+
+        if (!isGameStatePlayable()) {
+            logger.warn("game is not in playable position");
+            return;
+        }
+
         gameGrid.toggleSquareFlag(row, column);
         flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
     }
@@ -108,10 +130,11 @@ public class LogicManager {
     }
 
     private void endGame() {
-        logger.info("Ending Game");
+        logger.info("ending Game");
         stopGameTimer();
         isStarted = false;
-        logger.info("Game ended");
+        isGameStatePlayable = false;
+        logger.info("game ended");
     }
 
     private void stopGameTimer() {

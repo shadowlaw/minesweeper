@@ -21,29 +21,10 @@ public class SquareEventListener extends MouseAdapter {
         logger.info("square at position {},{} was clicked from button {}", source.getRow(), source.getColumn(), mouseEvent.getButton());
 
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-            executeLeftClickAction(source);
+            logicManager.actionLeftClickOnSquare(source.getRow(), source.getColumn());
         } else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
-            executeRightClickAction(source);
+            logicManager.actionRightClickOnSquare(source.getRow(), source.getColumn());
         }
-    }
-
-    private void executeRightClickAction(Square eventSquareSource) {
-
-
-        if (!logicManager.isGameStarted()) {
-            logicManager.startGame(eventSquareSource.getRow(), eventSquareSource.getColumn(), true);
-        }
-        logicManager.actionRightClickOnSquare(eventSquareSource.getRow(), eventSquareSource.getColumn());
-
-    }
-
-    private void executeLeftClickAction (Square eventSquareSource) {
-
-        if(!logicManager.isGameStarted()) {
-            logicManager.startGame(eventSquareSource.getRow(), eventSquareSource.getColumn(), false);
-        }
-
-        logicManager.actionLeftClickOnSquare(eventSquareSource.getRow(), eventSquareSource.getColumn());
     }
 
 }
