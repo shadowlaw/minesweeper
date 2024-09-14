@@ -9,6 +9,7 @@ public class Square {
     private boolean isOpened = false;
     private boolean isMine = false;
     private int adjacentMineNumber = 0;
+    private boolean isFlagged = false;
 
     public Square(int row, int column, int flatGridLocation) {
         position = new Position(row, column);
@@ -25,6 +26,10 @@ public class Square {
     }
 
     public void open(boolean clicked){
+        if (isFlagged()) {
+            return;
+        }
+
         if (isMine && clicked) {
             setTriggeredMine();
         }
@@ -70,5 +75,14 @@ public class Square {
 
     public void setUiSquare(com.shadowlaw.minesweeper.ui.components.Square uiSquare) {
         this.uiSquare = uiSquare;
+    }
+
+    public boolean isFlagged() {
+        return isFlagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        isFlagged = flagged;
+        uiSquare.setFlagged(flagged);
     }
 }

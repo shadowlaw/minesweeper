@@ -8,8 +8,6 @@ import org.apache.logging.log4j.Logger;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static com.shadowlaw.minesweeper.ui.constants.Asset.SQUARE_OPENED;
-
 
 public class SquareEventListener extends MouseAdapter {
 
@@ -19,25 +17,33 @@ public class SquareEventListener extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
 
+        Square source = (Square) mouseEvent.getSource();
+        logger.info("square at position {},{} was clicked from button {}", source.getRow(), source.getColumn(), mouseEvent.getButton());
+
         if (mouseEvent.getButton() == MouseEvent.BUTTON1) {
-            executeLeftClickAction(mouseEvent);
+            executeLeftClickAction(source);
+        } else if (mouseEvent.getButton() == MouseEvent.BUTTON3) {
+            executeRightClickAction(source);
         }
     }
 
-    private void executeLeftClickAction (MouseEvent mouseEvent) {
-        Square source = (Square) mouseEvent.getSource();
-        logger.info("square at position {},{} was clicked", source.getRow(), source.getColumn());
+    private void executeRightClickAction(Square eventSquareSource) {
+
+
+        if (!logicManager.isGameStarted()) {
+            logicManager.startGame(eventSquareSource.getRow(), eventSquareSource.getColumn(), true);
+        }
+        logicManager.actionRightClickOnSquare(eventSquareSource.getRow(), eventSquareSource.getColumn());
+
+    }
+
+    private void executeLeftClickAction (Square eventSquareSource) {
 
         if(!logicManager.isGameStarted()) {
-            startGame(source);
+            logicManager.startGame(eventSquareSource.getRow(), eventSquareSource.getColumn(), false);
         }
 
-        logicManager.openSquare(source.getRow(), source.getColumn());
-    }
-
-    private void startGame(Square square){
-
-        logicManager.startGame(square.getRow(), square.getColumn());
+        logicManager.actionLeftClickOnSquare(eventSquareSource.getRow(), eventSquareSource.getColumn());
     }
 
 }

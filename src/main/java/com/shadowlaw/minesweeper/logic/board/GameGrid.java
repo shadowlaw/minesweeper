@@ -16,11 +16,14 @@ public class GameGrid {
 
     private final Square[][] gameGrid;
     private List<Position> minePositions;
+    private int flagCount;
+    private final List<Square> flaggedSquares = new ArrayList<>();
 
-    public GameGrid(int rows, int columns, int mineNumber) {
+    public GameGrid(int rows, int columns, int mineNumber, int flagCount) {
         logger.debug("Initializing game grid with size {} X {}", rows, columns);
         this.gameGrid = new Square[rows][columns];
         this.mineNumber = mineNumber;
+        this.flagCount = flagCount;
         logger.info("Game grid initialized");
     }
 
@@ -152,6 +155,11 @@ public class GameGrid {
             return;
         }
 
+        if (square.isFlagged()) {
+            logger.warn("square {}:{} is flagged", row, column);
+            return;
+        }
+
         square.open(true);
 
         if (square.isMine()) {
@@ -174,6 +182,9 @@ public class GameGrid {
                 adjacentSquaresSet.addAll(getAdjacentSquares(adjacentSquare.getUiSquare().getRow(), adjacentSquare.getPosition().getColumn()));
                 adjacentSquareList = Arrays.asList(adjacentSquaresSet.toArray(new Square[]{}));
             }
+            if (adjacentSquare.isFlagged()) {
+                toggleSquareFlag(adjacentSquare.getPosition().getRow(), adjacentSquare.getPosition().getColumn());
+            }
             adjacentSquare.open();
         }
     }
@@ -182,7 +193,37 @@ public class GameGrid {
         for(Position minePosition: minePositions){
             Square mineSquare = getSquare(minePosition.getRow(), minePosition.getColumn());
             logger.debug("opening mine at position {}:{}", minePosition.getRow(), minePosition.getColumn());
+            if(mineSquare.isFlagged()){
+                logger.info("mine square is flagged. unable to open mine");
+                continue;
+            }
             mineSquare.open();
         }
+    }
+
+    public void toggleSquareFlag(int row, int column) {
+        Square square = getSquare(row, column);
+
+        if (square.isOpened()) {
+            logger.warn("Unable to toggle flag. Square is opened");
+            return;
+        }
+
+        if (square.isFlagged()) {
+            flaggedSquares.remove(square);
+        } else {
+            if (flaggedSquares.size() >= flagCount){
+                logger.warn("Unable to toggle flag. Game flag limit reached");
+                return;
+            }
+            flaggedSquares.add(square);
+        }
+
+        square.setFlagged(!square.isFlagged());
+        logger.info("square {}:{} flag toggled", row, column);
+    }
+
+    public int getAvailableFlags() {
+        return flagCount - flaggedSquares.size();
     }
 }

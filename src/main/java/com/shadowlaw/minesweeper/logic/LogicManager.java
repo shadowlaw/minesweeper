@@ -2,6 +2,7 @@ package com.shadowlaw.minesweeper.logic;
 
 import com.shadowlaw.minesweeper.logic.board.GameGrid;
 import com.shadowlaw.minesweeper.logic.board.Square;
+import com.shadowlaw.minesweeper.logic.header.Counter;
 import com.shadowlaw.minesweeper.logic.header.TimerCounterTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +23,7 @@ public class LogicManager {
     private final long gameTimerInitialDelay = 1000L;
     private final long gameTimerDelayPeriod = 1000L;
     private TimerCounterTask timerCounterTask;
+    private Counter flagCounter;
 
     private LogicManager() {}
 
@@ -33,8 +35,8 @@ public class LogicManager {
         return instance;
     }
 
-    public void createGameBoard(int boardSize, int mineNumber) {
-        gameGrid = new GameGrid(boardSize, boardSize, mineNumber);
+    public void createGameBoard(int boardSize, int mineNumber, int flagLimit) {
+        gameGrid = new GameGrid(boardSize, boardSize, mineNumber, flagLimit);
     }
 
     public Square addGameBoardSquare(int row, int column, int cellIndex) {
@@ -51,7 +53,7 @@ public class LogicManager {
         return gameGrid;
     }
 
-    public void startGame(int startSquareRow, int startSquareColumn) {
+    public void startGame(int startSquareRow, int startSquareColumn, boolean flagSquare) {
 
         logger.info("starting new game from square {}:{}", startSquareRow, startSquareColumn);
 
@@ -61,7 +63,9 @@ public class LogicManager {
 
         startGameTimer(gameTimerInitialDelay, gameTimerDelayPeriod, TimeUnit.MILLISECONDS);
 
-        gameGrid.openSquare(startSquareRow, startSquareColumn);
+        if (!flagSquare) {
+            gameGrid.openSquare(startSquareRow, startSquareColumn);
+        }
 
         logger.info("game started");
 
@@ -76,7 +80,17 @@ public class LogicManager {
         timer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
     }
 
-    public void openSquare(int row, int column) {
+    public void actionLeftClickOnSquare(int row, int column) {
         gameGrid.openSquare(row, column);
+        flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
+    }
+
+    public void actionRightClickOnSquare(int row, int column) {
+        gameGrid.toggleSquareFlag(row, column);
+        flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
+    }
+
+    public void setFlagCounter(Counter logicCounter) {
+        this.flagCounter = logicCounter;
     }
 }

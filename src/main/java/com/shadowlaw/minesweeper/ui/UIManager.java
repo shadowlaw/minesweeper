@@ -24,6 +24,7 @@ public class UIManager {
 
     private final Integer gameBoardSize = 9;
     private final Integer mineNumber = 10;
+    private int flagLimit = 10;
 
     private UIManager() {}
 
@@ -61,7 +62,7 @@ public class UIManager {
 
         boardPanel.setBorder(new EmptyBorder(DEFAULT_BOARDER_THICKNESS/2, DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS, DEFAULT_BOARDER_THICKNESS));
 
-        logicManager.createGameBoard(gameBoardSize, mineNumber);
+        logicManager.createGameBoard(gameBoardSize, mineNumber, flagLimit);
 
         for (int squareIndex=0; squareIndex < (gameBoardSize * gameBoardSize); squareIndex++) {
             int row = logicManager.getGameGrid().getRowFromGridCellNumber(squareIndex);
@@ -89,6 +90,7 @@ public class UIManager {
         Counter flagPanel = new Counter(FLAG_COUNTER, "0", "1", "0");
         Counter counterPanel = new Counter(TIME_COUNTER, "0", "0", "0");
         logicManager.setTimerCounterTask(new TimerCounterTask(counterPanel.getLogicCounter()));
+        logicManager.setFlagCounter(flagPanel.getLogicCounter());
 
         headerPanel.add(flagPanel, BorderLayout.WEST);
         headerPanel.add(counterPanel, BorderLayout.EAST);
