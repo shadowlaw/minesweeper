@@ -3,6 +3,7 @@ package com.shadowlaw.minesweeper.logic;
 import com.shadowlaw.minesweeper.logic.board.GameGrid;
 import com.shadowlaw.minesweeper.logic.board.Square;
 import com.shadowlaw.minesweeper.logic.header.Counter;
+import com.shadowlaw.minesweeper.logic.header.GameState;
 import com.shadowlaw.minesweeper.logic.header.TimerCounterTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,10 +19,14 @@ public class LogicManager {
     private final Logger logger = LogManager.getLogger(LogicManager.class);
 
     private Boolean isStarted = Boolean.FALSE;
+    private boolean isGameStatePlayable = true;
+    private GameState gameState;
+
     private GameGrid gameGrid;
 
     private final long gameTimerInitialDelay = 1000L;
     private final long gameTimerDelayPeriod = 1000L;
+    private ScheduledExecutorService gameTimer;
     private TimerCounterTask timerCounterTask;
     private Counter flagCounter;
 
@@ -45,8 +50,8 @@ public class LogicManager {
         return square;
     }
 
-    public boolean isGameStarted() {
-        return isStarted;
+    public boolean isGameStartable() {
+        return !isStarted && isGameStatePlayable;
     }
 
     public GameGrid getGameGrid() {
@@ -57,8 +62,6 @@ public class LogicManager {
 
         logger.info("starting new game from square {}:{}", startSquareRow, startSquareColumn);
 
-        isStarted = true;
-
         gameGrid.initialize(startSquareRow, startSquareColumn);
 
         startGameTimer(gameTimerInitialDelay, gameTimerDelayPeriod, TimeUnit.MILLISECONDS);
@@ -66,6 +69,8 @@ public class LogicManager {
         if (!flagSquare) {
             gameGrid.openSquare(startSquareRow, startSquareColumn);
         }
+
+        isStarted = true;
 
         logger.info("game started");
 
@@ -76,21 +81,85 @@ public class LogicManager {
     }
 
     private void startGameTimer(long initialDelay, long period, TimeUnit timeUnit) {
-        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
-        timer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
+        gameTimer = Executors.newSingleThreadScheduledExecutor();
+        gameTimer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
+    }
+
+    public boolean isGameStatePlayable() {
+        return isGameStatePlayable;
     }
 
     public void actionLeftClickOnSquare(int row, int column) {
+
+        if(isGameStartable()) {
+            startGame(row, column, false);
+        }
+
+        if (!isGameStatePlayable()) {
+            logger.warn("game is not in playable position");
+            return;
+        }
+
         gameGrid.openSquare(row, column);
+
+        Square square = gameGrid.getSquare(row, column);
+
+        if (square.isOpened() && square.isMine()) {
+            logger.info("Mine square {}:{} opened", row, column);
+            gameState.updateGameState(false);
+            endGame();
+            return;
+        }
+
         flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
     }
 
     public void actionRightClickOnSquare(int row, int column) {
+        if(isGameStartable()) {
+            startGame(row, column, true);
+        }
+
+        if (!isGameStatePlayable()) {
+            logger.warn("game is not in playable position");
+            return;
+        }
+
         gameGrid.toggleSquareFlag(row, column);
         flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
     }
 
     public void setFlagCounter(Counter logicCounter) {
         this.flagCounter = logicCounter;
+    }
+
+    private void endGame() {
+        logger.info("ending Game");
+        stopGameTimer();
+        isStarted = false;
+        isGameStatePlayable = false;
+        logger.info("game ended");
+    }
+
+    private void stopGameTimer() {
+
+        if (gameTimer.isShutdown()) {
+            logger.warn("game timer is already stopped");
+            return;
+        }
+
+        gameTimer.shutdown();
+
+        try{
+            while (!gameTimer.awaitTermination(gameTimerDelayPeriod, TimeUnit.MILLISECONDS)) {
+                logger.debug("waiting for game timer to terminate. waiting for {} milliseconds", gameTimerDelayPeriod);
+            }
+        } catch (InterruptedException e) {
+            logger.trace(e);
+            logger.error("Game timer termination Interrupted");
+        }
+    }
+
+    public void initializeGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 }
