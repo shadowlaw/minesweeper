@@ -1,7 +1,6 @@
 package com.shadowlaw.minesweeper.ui.components;
 
-import static com.shadowlaw.minesweeper.ui.constants.Asset.FACE_CROSS;
-import static com.shadowlaw.minesweeper.ui.constants.Asset.FACE_SMILE;
+import static com.shadowlaw.minesweeper.ui.constants.Asset.*;
 
 public class GameStateIcon extends ImageLabel{
 
@@ -11,5 +10,9 @@ public class GameStateIcon extends ImageLabel{
 
     public void setGameLost() {
         setImage(FACE_CROSS.getPath());
+    }
+
+    public void setGameWin() {
+        setImage(FACE_COOL.getPath());
     }
 }

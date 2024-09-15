@@ -18,6 +18,8 @@ public class GameGrid {
     private List<Position> minePositions;
     private int flagCount;
     private final List<Square> flaggedSquares = new ArrayList<>();
+    private HashSet<Square> squaresWithAdjacentMines = new HashSet<>();
+    private HashSet<Square> numberOfAdjacentMineSquaresOpened = new HashSet<>();
 
     public GameGrid(int rows, int columns, int mineNumber, int flagCount) {
         logger.debug("Initializing game grid with size {} X {}", rows, columns);
@@ -45,6 +47,18 @@ public class GameGrid {
             logger.trace(e.getStackTrace());
             throw new SquareNotFound(String.format("Unable to locate square with location %s:%s", row, column));
         }
+    }
+
+    public int getFlagCount() {
+        return flagCount;
+    }
+
+    public int getSquaresWithAdjacentMines() {
+        return squaresWithAdjacentMines.size();
+    }
+
+    public int getNumberOfAdjacentMineSquaresOpened() {
+        return numberOfAdjacentMineSquaresOpened.size();
     }
 
     public int getRowFromGridCellNumber(int cellNumber) {
@@ -75,11 +89,24 @@ public class GameGrid {
         for(Position minePosition: minePositions){
             Square mineSquare = getSquare(minePosition.getRow(), minePosition.getColumn());
             mineSquare.setMine(true);
+
+            if (mineSquare.getAdjacentMineNumber() > 0) {
+                mineSquare.setAdjacentMineNumber(0);
+                squaresWithAdjacentMines.remove(mineSquare);
+            }
+
             List<Square> adjacentSquares = getAdjacentSquares(minePosition.getRow(), minePosition.getColumn());
-            for(Square adjacentSquare: adjacentSquares)
+            for(Square adjacentSquare: adjacentSquares) {
+                if (adjacentSquare.isMine())
+                    continue;
+
                 adjacentSquare.setAdjacentMineNumber(
                         adjacentSquare.getAdjacentMineNumber() + 1
                 );
+
+                squaresWithAdjacentMines.add(adjacentSquare);
+
+            }
         }
     }
 
@@ -162,6 +189,9 @@ public class GameGrid {
 
         square.open(true);
 
+        if (square.getAdjacentMineNumber() > 0 )
+            numberOfAdjacentMineSquaresOpened.add(square);
+
         if (square.isMine()) {
             openMines();
         } else if (square.getAdjacentMineNumber() == 0) {
@@ -181,6 +211,8 @@ public class GameGrid {
             if (adjacentSquare.getAdjacentMineNumber() == 0) {
                 adjacentSquaresSet.addAll(getAdjacentSquares(adjacentSquare.getUiSquare().getRow(), adjacentSquare.getPosition().getColumn()));
                 adjacentSquareList = Arrays.asList(adjacentSquaresSet.toArray(new Square[]{}));
+            } else {
+                numberOfAdjacentMineSquaresOpened.add(adjacentSquare);
             }
             if (adjacentSquare.isFlagged()) {
                 toggleSquareFlag(adjacentSquare.getPosition().getRow(), adjacentSquare.getPosition().getColumn());
@@ -225,5 +257,10 @@ public class GameGrid {
 
     public int getAvailableFlags() {
         return flagCount - flaggedSquares.size();
+    }
+
+    public void flagAllMineSquares() {
+        minePositions.forEach(minePositions ->
+                getSquare(minePositions.getRow(), minePositions.getColumn()).setFlagged(true));
     }
 }

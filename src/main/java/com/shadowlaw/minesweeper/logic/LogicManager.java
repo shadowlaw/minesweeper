@@ -97,12 +97,21 @@ public class LogicManager {
 
         if (square.isOpened() && square.isMine()) {
             logger.info("Mine square {}:{} opened", row, column);
-            gameState.updateGameState(false);
+            gameState.updateGameEndState(false);
             endGame();
             return;
         }
 
+        gameState.setSafeSquares(gameGrid.getNumberOfAdjacentMineSquaresOpened());
         flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
+
+        if (gameState.checkGameWinCondition(gameGrid.getSquaresWithAdjacentMines())) {
+            logger.info("Player won the game");
+            gameGrid.flagAllMineSquares();
+            gameState.updateGameEndState(true);
+            endGame();
+        }
+
     }
 
     public void actionRightClickOnSquare(int row, int column) {
