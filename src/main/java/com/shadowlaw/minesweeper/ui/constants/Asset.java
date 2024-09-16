@@ -30,7 +30,8 @@ public enum Asset {
     SQUARE_FLAGGED("sprites/squares/square-flagged.png"),
 
     FACE_SMILE("sprites/faces/face-smile.png"),
-    FACE_CROSS("sprites/faces/face-cross.png");
+    FACE_CROSS("sprites/faces/face-cross.png"),
+    FACE_COOL("sprites/faces/face-cool.png");
 
     private final String path;
 

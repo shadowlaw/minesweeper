@@ -18,8 +18,6 @@ public class LogicManager {
     private static LogicManager instance;
     private final Logger logger = LogManager.getLogger(LogicManager.class);
 
-    private Boolean isStarted = Boolean.FALSE;
-    private boolean isGameStatePlayable = true;
     private GameState gameState;
 
     private GameGrid gameGrid;
@@ -50,10 +48,6 @@ public class LogicManager {
         return square;
     }
 
-    public boolean isGameStartable() {
-        return !isStarted && isGameStatePlayable;
-    }
-
     public GameGrid getGameGrid() {
         return gameGrid;
     }
@@ -70,7 +64,7 @@ public class LogicManager {
             gameGrid.openSquare(startSquareRow, startSquareColumn);
         }
 
-        isStarted = true;
+        gameState.setStarted(true);
 
         logger.info("game started");
 
@@ -85,17 +79,14 @@ public class LogicManager {
         gameTimer.scheduleAtFixedRate(timerCounterTask, initialDelay, period, timeUnit);
     }
 
-    public boolean isGameStatePlayable() {
-        return isGameStatePlayable;
-    }
 
     public void actionLeftClickOnSquare(int row, int column) {
 
-        if(isGameStartable()) {
+        if(gameState.isGameStartable()) {
             startGame(row, column, false);
         }
 
-        if (!isGameStatePlayable()) {
+        if (!gameState.isGameStatePlayable()) {
             logger.warn("game is not in playable position");
             return;
         }
@@ -106,20 +97,29 @@ public class LogicManager {
 
         if (square.isOpened() && square.isMine()) {
             logger.info("Mine square {}:{} opened", row, column);
-            gameState.updateGameState(false);
+            gameState.updateGameEndState(false);
             endGame();
             return;
         }
 
+        gameState.setSafeSquares(gameGrid.getNumberOfAdjacentMineSquaresOpened());
         flagCounter.updateCounterState((long) gameGrid.getAvailableFlags());
+
+        if (gameState.checkGameWinCondition(gameGrid.getSquaresWithAdjacentMines())) {
+            logger.info("Player won the game");
+            gameGrid.flagAllMineSquares();
+            gameState.updateGameEndState(true);
+            endGame();
+        }
+
     }
 
     public void actionRightClickOnSquare(int row, int column) {
-        if(isGameStartable()) {
+        if(gameState.isGameStartable()) {
             startGame(row, column, true);
         }
 
-        if (!isGameStatePlayable()) {
+        if (!gameState.isGameStatePlayable()) {
             logger.warn("game is not in playable position");
             return;
         }
@@ -135,8 +135,8 @@ public class LogicManager {
     private void endGame() {
         logger.info("ending Game");
         stopGameTimer();
-        isStarted = false;
-        isGameStatePlayable = false;
+        gameState.setStarted(false);
+        gameState.setGameStatePlayable(false);
         logger.info("game ended");
     }
 
