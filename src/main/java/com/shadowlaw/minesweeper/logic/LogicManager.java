@@ -162,4 +162,30 @@ public class LogicManager {
     public void initializeGameState(GameState gameState) {
         this.gameState = gameState;
     }
+
+
+    public void resetGame() {
+
+        if(gameState.isGameStartable()) {
+            logger.warn("game in a ready state");
+            return;
+        }
+
+        resetGameTimer();
+        resetFlagCounter();
+        gameGrid.resetGameBoard();
+        gameState.setStarted(false);
+        gameState.setGameStatePlayable(true);
+        gameState.updateGameEndState(null);
+
+    }
+
+    private void resetFlagCounter() {
+        flagCounter.updateCounterState((long) gameGrid.getFlagCount());
+    }
+
+    private void resetGameTimer() {
+        stopGameTimer();
+        timerCounterTask.getCounter().updateCounterState(0L);
+    }
 }
