@@ -102,4 +102,10 @@ public class Square extends ImageLabel {
         setImage(SQUARE_CLOSED.getPath());
         setPath(previousPath);
     }
+
+    public void close() {
+        previousPath = path;
+        setImage(SQUARE_CLOSED.getPath());
+        setPath(previousPath);
+    }
 }

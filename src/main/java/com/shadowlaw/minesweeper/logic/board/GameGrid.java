@@ -263,4 +263,17 @@ public class GameGrid {
         minePositions.forEach(minePositions ->
                 getSquare(minePositions.getRow(), minePositions.getColumn()).setFlagged(true));
     }
+
+    public void resetGameBoard() {
+        for (int rowIndex = 0; rowIndex < gameGrid.length; rowIndex++) {
+            for (int columnIndex = 0; columnIndex < gameGrid[rowIndex].length; columnIndex++) {
+                Square square = getSquare(rowIndex, columnIndex);
+
+                square.setFlagged(false);
+                square.setMine(false);
+                square.setAdjacentMineNumber(0);
+                square.close();
+            }
+        }
+    }
 }

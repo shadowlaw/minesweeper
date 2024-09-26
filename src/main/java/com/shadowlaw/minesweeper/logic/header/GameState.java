@@ -1,6 +1,5 @@
 package com.shadowlaw.minesweeper.logic.header;
 
-import com.shadowlaw.minesweeper.logic.board.Square;
 import com.shadowlaw.minesweeper.ui.components.GameStateIcon;
 
 public class GameState {
@@ -12,7 +11,7 @@ public class GameState {
     private int safeSquares = 0;
 
 
-    private GameStateIcon gameStateIcon;
+    private final GameStateIcon gameStateIcon;
 
     public GameState(GameStateIcon gameStateIcon) {
         this.gameStateIcon = gameStateIcon;
@@ -20,7 +19,10 @@ public class GameState {
 
     public void updateGameEndState(Boolean gameState) {
         gameWinState = gameState;
-        if (gameWinState) {
+
+        if (gameState == null) {
+            gameStateIcon.setInitialIcon();
+        }else if (gameWinState) {
             gameStateIcon.setGameWin();
         } else {
             gameStateIcon.setGameLost();

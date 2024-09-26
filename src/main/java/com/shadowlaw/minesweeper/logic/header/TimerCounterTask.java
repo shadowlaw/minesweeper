@@ -15,6 +15,10 @@ public class TimerCounterTask extends TimerTask {
         this.counter = counter;
     }
 
+    public Counter getCounter() {
+        return counter;
+    }
+
     @Override
     public void run() {
         logger.debug("Timer tick for counter: {} at {}", counter.getCounterName(), counter.getValue());

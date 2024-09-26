@@ -25,6 +25,11 @@ public class Square {
         uiSquare.open();
     }
 
+    public void close() {
+        isOpened = false;
+        uiSquare.close();
+    }
+
     public void open(boolean clicked){
         if (isFlagged()) {
             return;
