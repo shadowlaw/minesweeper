@@ -255,6 +255,10 @@ public class GameGrid {
         logger.info("square {}:{} flag toggled", row, column);
     }
 
+    public void clearFlaggedSquares(){
+        flaggedSquares.clear();
+    }
+
     public int getAvailableFlags() {
         return flagCount - flaggedSquares.size();
     }
