@@ -187,5 +187,6 @@ public class LogicManager {
     private void resetGameTimer() {
         stopGameTimer();
         timerCounterTask.getCounter().updateCounterState(0L);
+        timerCounterTask.getCounter().setValue(0L);
     }
 }
