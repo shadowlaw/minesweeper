@@ -181,11 +181,14 @@ public class LogicManager {
     }
 
     private void resetFlagCounter() {
+        gameGrid.clearFlaggedSquares();
         flagCounter.updateCounterState((long) gameGrid.getFlagCount());
+        flagCounter.setValue(gameGrid.getFlagCount());
     }
 
     private void resetGameTimer() {
         stopGameTimer();
         timerCounterTask.getCounter().updateCounterState(0L);
+        timerCounterTask.getCounter().setValue(0L);
     }
 }
